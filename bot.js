@@ -2,21 +2,35 @@ const mineflayer = require('mineflayer');
 
 const HOST = 'vortexx.mooo.com';
 const PORT = 25565;
-const BOT_COUNT = 10;
-const BOT_PREFIX = 'ActionBot';
+const NAMES = [
+  'MinhKhoa',
+  'AnTran',
+  'LinhNguyen',
+  'DucPham',
+  'HieuLe',
+  'TuanAnh',
+  'QuangHuy',
+  'NamTran',
+  'KhanhVo',
+  'PhucNguyen'
+];
 
 function createBot(index) {
-  const username = BOT_PREFIX + (index + 1);
+  const username = NAMES[index];
   const bot = mineflayer.createBot({
     host: HOST,
     port: PORT,
     username: username,
-    version: '1.21.8',
+    version: false,
     auth: 'offline'
   });
 
+  bot.on('login', () => {
+    console.log(`[${username}] Logged in`);
+  });
+
   bot.on('spawn', () => {
-    console.log(`[${username}] Joined the server`);
+    console.log(`[${username}] Spawned in world`);
   });
 
   bot.on('error', (err) => {
@@ -24,24 +38,21 @@ function createBot(index) {
   });
 
   bot.on('kicked', (reason) => {
-    console.log(`[${username}] Kicked: ${reason}`);
+    console.log(`[${username}] Kicked: ${JSON.stringify(reason)}`);
   });
 
-  bot.on('end', () => {
-    console.log(`[${username}] Disconnected`);
+  bot.on('end', (reason) => {
+    console.log(`[${username}] Ended: ${reason}`);
   });
 
   return bot;
 }
 
 const bots = [];
-for (let i = 0; i < BOT_COUNT; i++) {
+for (let i = 0; i < NAMES.length; i++) {
   setTimeout(() => {
     bots.push(createBot(i));
-  }, i * 2000);
+  }, i * 3000);
 }
 
-process.on('SIGINT', () => {
-  bots.forEach(b => b.quit());
-  process.exit();
-});
+setInterval(() => {}, 1000);
