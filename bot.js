@@ -2,11 +2,11 @@ const mineflayer = require('mineflayer');
 
 const HOST = 'vortexx.mooo.com';
 const PORT = 25565;
-const NAMES = ['MinhKhoa', 'AnTran', 'LinhNguyen', 'DucPham', 'HieuLe'];
+const NAMES = ['MinhKhoa', 'AnTran', 'LinhNguyen'];
 
 function createBot(index) {
   const username = NAMES[index];
-  console.log(`[${username}] Creating with version 1.21.8...`);
+  console.log(`[${username}] Starting...`);
   
   const bot = mineflayer.createBot({
     host: HOST,
@@ -16,19 +16,31 @@ function createBot(index) {
     auth: 'offline'
   });
 
-  bot.on('connect', () => console.log(`[${username}] TCP OK`));
-  bot.on('login', () => console.log(`[${username}] LOGIN OK`));
-  bot.on('spawn', () => console.log(`[${username}] SPAWN OK!`));
-  bot.on('error', (err) => console.log(`[${username}] ERR: ${err.message}`));
-  bot.on('kicked', (reason) => console.log(`[${username}] KICK: ${JSON.stringify(reason)}`));
-  bot.on('end', (reason) => console.log(`[${username}] END: ${reason}`));
+  bot.on('connect', () => console.log(`[${username}] Connected`));
+  
+  bot.on('login', () => {
+    console.log(`[${username}] Login OK`);
+  });
+
+  bot._client.on('resource_pack_send', (packet) => {
+    console.log(`[${username}] Resource pack received, accepting...`);
+    bot._client.write('resource_pack_receive', { result: 3 });
+  });
+
+  bot.on('spawn', () => {
+    console.log(`[${username}] SPAWNED!`);
+  });
+
+  bot.on('error', (err) => console.log(`[${username}] Error: ${err.message}`));
+  bot.on('kicked', (reason) => console.log(`[${username}] Kicked: ${JSON.stringify(reason)}`));
+  bot.on('end', (reason) => console.log(`[${username}] End: ${reason}`));
 
   return bot;
 }
 
-console.log('Starting bots with 1.21.8...');
+console.log('Starting bots...');
 for (let i = 0; i < NAMES.length; i++) {
-  setTimeout(() => createBot(i), i * 6000);
+  setTimeout(() => createBot(i), i * 8000);
 }
 
 setInterval(() => console.log('alive'), 60000);
