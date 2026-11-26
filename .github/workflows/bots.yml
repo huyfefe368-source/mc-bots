@@ -2,14 +2,13 @@ name: Minecraft Bots
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Minecraft Bots"]
-    types: [completed]
+  schedule:
+    - cron: '0 */5 * * *'
 
 jobs:
   bots:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 290
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,4 +17,3 @@ jobs:
       - run: npm install
       - name: Run bots
         run: node bot.js
-        timeout-minutes: 340
