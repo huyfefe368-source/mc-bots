@@ -1,0 +1,21 @@
+name: Minecraft Bots
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Minecraft Bots"]
+    types: [completed]
+
+jobs:
+  bots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - name: Run bots
+        run: node bot.js
+        timeout-minutes: 340
