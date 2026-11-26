@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "main": "bot.js",
   "dependencies": {
-    "mineflayer": "^4.27.0"
+    "mineflayer": "^4.39.0"
   }
 }
