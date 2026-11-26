@@ -2,6 +2,7 @@ const mineflayer = require('mineflayer');
 
 const HOST = 'vortexx.mooo.com';
 const PORT = 25565;
+const PASSWORD = 'BotPass123';
 const NAMES = [
   'MinhKhoa',
   'AnTran',
@@ -26,11 +27,26 @@ function createBot(index) {
   });
 
   bot.on('login', () => {
-    console.log(`[${username}] Logged in`);
+    console.log(`[${username}] Connected`);
   });
 
   bot.on('spawn', () => {
-    console.log(`[${username}] Spawned in world`);
+    console.log(`[${username}] Spawned`);
+    setTimeout(() => {
+      bot.chat(`/register ${PASSWORD} ${PASSWORD}`);
+      console.log(`[${username}] Sent /register`);
+    }, 1500);
+    setTimeout(() => {
+      bot.chat(`/login ${PASSWORD}`);
+      console.log(`[${username}] Sent /login`);
+    }, 3000);
+  });
+
+  bot.on('message', (msg) => {
+    const text = msg.toString();
+    if (text.includes('register') || text.includes('login') || text.includes('AuthMe')) {
+      console.log(`[${username}] Chat: ${text}`);
+    }
   });
 
   bot.on('error', (err) => {
@@ -52,7 +68,7 @@ const bots = [];
 for (let i = 0; i < NAMES.length; i++) {
   setTimeout(() => {
     bots.push(createBot(i));
-  }, i * 3000);
+  }, i * 4000);
 }
 
 setInterval(() => {}, 1000);
